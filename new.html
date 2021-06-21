@@ -73,6 +73,21 @@
         }
       });
       
+            AFRAME.registerComponent('hide-in-desktop-mode', {
+        // Set this object invisible while in AR mode.
+        init: function () {
+          this.el.sceneEl.addEventListener('enter-vr', (ev) => {
+            this.wasVisible = this.el.getAttribute('visible');
+            if (this.el.sceneEl.is('ar-mode')) {
+              this.el.setAttribute('visible', false);
+            }
+          });
+          this.el.sceneEl.addEventListener('exit-vr', (ev) => {
+            if (this.wasVisible) this.el.setAttribute('visible', true);
+          });
+        }
+      });
+      
       AFRAME.registerComponent('ar-shadows', {
         // Swap an object's material to a transparent shadows-only material while
         // in AR mode. Intended for use with a ground plane. The object is also
@@ -128,8 +143,8 @@
       </a-assets>
       
       
-      <a-link href="https://warpdream.glitch.me" title= "Warp Dream (Desktop optimized)" img="https://cdn.glitch.com/475b01eb-dc1a-45df-ade9-be7ffce6f031%2Fheart-png.png?v=1624245316731" position="-3 2 -3"></a-link>
-         <a-link href="https://virtual-reality-city.glitch.me" title= "Virtual Reality City (Android AR optimized)" img="https://cdn.glitch.com/475b01eb-dc1a-45df-ade9-be7ffce6f031%2Fheart-png.png?v=1624245316731" position="6 2 -3"></a-link>
+      <a-link href="https://bsready.glitch.me" title= "Ready Aim Fire" img="https://cdn.glitch.com/475b01eb-dc1a-45df-ade9-be7ffce6f031%2Fheart-png.png?v=1624245316731" position="-3 2 -3"></a-link>
+         <a-link href="https://virtual-reality-city.glitch.me" title= "Virtual Reality City (Android AR enabled)" img="https://cdn.glitch.com/475b01eb-dc1a-45df-ade9-be7ffce6f031%2Fheart-png.png?v=1624245316731" position="6 2 -3"></a-link>
       
       <!-- Environment for 2D and VR viewing. It's auto-hidden in AR mode. 
 
@@ -202,7 +217,7 @@
       </a-entity>  
       
       
-      <a-text value="Hello, World! This scene is optimized for VR on Oculus Quest and AR on Android. In VR, teleport using the left hand trigger button. Point to the ground and put down a voxel or two with your right hand! Alternatively, you can go into the portals and see what's behind them! All scenes are works in progress! =^.^=" position="-1 3 -3"></a-text>
+      <a-text value="Hello, World! Teleport using the left hand trigger button. Point to the ground and put down a voxel or two with your right hand! Alternatively, you can go into the Ready Aim Fire portal and see what's behind it! Don't forget about AR mode on Android! =^.^=" position="-1 3 -3"></a-text>
       
       
       <a-entity light="type: ambient; intensity: 0.5;"></a-entity>
@@ -230,13 +245,12 @@
       <a-entity id="cameraRig" movement-controls>
         <a-camera id="head" camera>
         
-        
-        </a-camera>
-        <a-entity
+               <a-entity
           id="left-hand"
           oculus-touch-controls="hand:left; model:false"
           teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head; button: trigger"
-  
+          gltf-model="https://cdn.glitch.com/729adbb2-7cfe-4073-b6b1-121376854e5c%2Fportalgunsm01.glb?v=1624271266453"
+                  rotateplayer="hand: left"
         >
           <a-entity> </a-entity>
           <a-entity
@@ -252,13 +266,16 @@
           oculus-touch-controls="hand:right"
         >
    
-          
            <a-cursor
           intersection-spawn-box="event: click; mixin: voxel" 
 
         >
           </a-cursor>
+          
         </a-entity>
+        
+        </a-camera>
+   
       </a-entity>
       
       
